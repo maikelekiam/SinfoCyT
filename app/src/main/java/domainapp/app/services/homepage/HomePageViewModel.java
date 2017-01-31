@@ -22,8 +22,8 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.ViewModel;
 
-import domainapp.dom.simple.SimpleObject;
-import domainapp.dom.simple.SimpleObjects;
+import domainapp.dom.actuacion.Actuacion;
+import domainapp.dom.actuacion.ActuacionServicio;
 
 @ViewModel
 public class HomePageViewModel {
@@ -36,7 +36,7 @@ public class HomePageViewModel {
 
     //region > object (collection)
     @org.apache.isis.applib.annotation.HomePage
-    public List<SimpleObject> getObjects() {
+    public List<Actuacion> getObjects() {
         return simpleObjects.listAll();
     }
     //endregion
@@ -44,7 +44,7 @@ public class HomePageViewModel {
     //region > injected services
 
     @javax.inject.Inject
-    SimpleObjects simpleObjects;
+    ActuacionServicio simpleObjects;
 
     //endregion
 }

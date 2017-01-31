@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.dom.simple;
+package domainapp.dom.actuacion;
 
 import java.util.List;
 
@@ -37,16 +37,17 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        repositoryFor = SimpleObject.class
+        repositoryFor = Actuacion.class
 )
 @DomainServiceLayout(
-        menuOrder = "10"
+        menuOrder = "10",
+        named="Actuaciones"
 )
-public class SimpleObjects {
+public class ActuacionServicio {
 
     //region > title
     public TranslatableString title() {
-        return TranslatableString.tr("Simple Objects");
+        return TranslatableString.tr("Actuaciones");
     }
     //endregion
 
@@ -58,8 +59,8 @@ public class SimpleObjects {
             bookmarking = BookmarkPolicy.AS_ROOT
     )
     @MemberOrder(sequence = "1")
-    public List<SimpleObject> listAll() {
-        return repositoryService.allInstances(SimpleObject.class);
+    public List<Actuacion> listAll() {
+        return repositoryService.allInstances(Actuacion.class);
     }
     //endregion
 
@@ -71,21 +72,27 @@ public class SimpleObjects {
             bookmarking = BookmarkPolicy.AS_ROOT
     )
     @MemberOrder(sequence = "2")
-    public List<SimpleObject> findByName(
-            @ParameterLayout(named="Name")
-            final String name
+    public List<Actuacion> findByName(
+            @ParameterLayout(named="Nombre")
+            final String nombre
     ) {
         return repositoryService.allMatches(
                 new QueryDefault<>(
-                        SimpleObject.class,
+                        Actuacion.class,
                         "findByName",
-                        "name", name));
+                        "nombre", nombre));
     }
     //endregion
 
     //region > create (action)
-    public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjects> {
-        public CreateDomainEvent(final SimpleObjects source, final Identifier identifier, final Object... arguments) {
+    public static class CreateDomainEvent extends ActionDomainEvent<ActuacionServicio> {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		@SuppressWarnings("deprecation")
+		public CreateDomainEvent(final ActuacionServicio source, final Identifier identifier, final Object... arguments) {
             super(source, identifier, arguments);
         }
     }
@@ -94,10 +101,10 @@ public class SimpleObjects {
             domainEvent = CreateDomainEvent.class
     )
     @MemberOrder(sequence = "3")
-    public SimpleObject create(
-            final @ParameterLayout(named="Name") String name) {
-        final SimpleObject obj = repositoryService.instantiate(SimpleObject.class);
-        obj.setName(name);
+    public Actuacion create(
+            final @ParameterLayout(named="Nombre") String nombre) {
+        final Actuacion obj = repositoryService.instantiate(Actuacion.class);
+        obj.setNombre(nombre);
         repositoryService.persist(obj);
         return obj;
     }

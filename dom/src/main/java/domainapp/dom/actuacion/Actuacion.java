@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.dom.simple;
+package domainapp.dom.actuacion;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
@@ -34,7 +34,7 @@ import org.apache.isis.applib.util.ObjectContracts;
 @javax.jdo.annotations.PersistenceCapable(
         identityType=IdentityType.DATASTORE,
         schema = "simple",
-        table = "SimpleObject"
+        table = "Actuacion"
 )
 @javax.jdo.annotations.DatastoreIdentity(
         strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
@@ -47,26 +47,31 @@ import org.apache.isis.applib.util.ObjectContracts;
         @javax.jdo.annotations.Query(
                 name = "find", language = "JDOQL",
                 value = "SELECT "
-                        + "FROM domainapp.dom.simple.SimpleObject "),
+                        + "FROM domainapp.dom.actuacion.Actuacion "),
         @javax.jdo.annotations.Query(
                 name = "findByName", language = "JDOQL",
                 value = "SELECT "
-                        + "FROM domainapp.dom.simple.SimpleObject "
-                        + "WHERE name.indexOf(:name) >= 0 ")
+                        + "FROM domainapp.dom.actuacion.Actuacion "
+                        + "WHERE nombre.indexOf(:nombre) >= 0 ")
 })
-@javax.jdo.annotations.Unique(name="SimpleObject_name_UNQ", members = {"name"})
+@javax.jdo.annotations.Unique(name="Actuacion_nombre_UNQ", members = {"nombre"})
 @DomainObject
-public class SimpleObject implements Comparable<SimpleObject> {
+public class Actuacion implements Comparable<Actuacion> {
 
     public static final int NAME_LENGTH = 40;
 
 
     public TranslatableString title() {
-        return TranslatableString.tr("Object: {name}", "name", getName());
+        return TranslatableString.tr("Object: {nombre}", "nombre", getNombre());
     }
 
 
-    public static class NameDomainEvent extends PropertyDomainEvent<SimpleObject,String> {}
+    public static class NameDomainEvent extends PropertyDomainEvent<Actuacion,String> {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;}
     @javax.jdo.annotations.Column(
             allowsNull="false",
             length = NAME_LENGTH
@@ -74,38 +79,16 @@ public class SimpleObject implements Comparable<SimpleObject> {
     @Property(
         domainEvent = NameDomainEvent.class
     )
-    private String name;
-    public String getName() {
-        return name;
+    private String nombre;
+    public String getNombre() {return nombre;}
+	public void setNombre(String nombre) {this.nombre = nombre;}
+
+	@SuppressWarnings("deprecation")
+	@Override
+    public int compareTo(final Actuacion other) {
+        return ObjectContracts.compare(this, other, "nombre");
     }
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public TranslatableString validateName(final String name) {
-        return name != null && name.contains("!")? TranslatableString.tr("Exclamation mark is not allowed"): null;
-    }
-
-
-
-    public static class DeleteDomainEvent extends ActionDomainEvent<SimpleObject> {}
-    @Action(
-            domainEvent = DeleteDomainEvent.class,
-            semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE
-    )
-    public void delete() {
-        repositoryService.remove(this);
-    }
-
-
-
-    @Override
-    public int compareTo(final SimpleObject other) {
-        return ObjectContracts.compare(this, other, "name");
-    }
-
 
     @javax.inject.Inject
     RepositoryService repositoryService;
-
 }

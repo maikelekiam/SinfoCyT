@@ -14,11 +14,14 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package domainapp.dom.simple;
+package domainapp.dom.actuacion;
 
 import java.util.List;
 
 import com.google.common.collect.Lists;
+
+import domainapp.dom.actuacion.Actuacion;
+import domainapp.dom.actuacion.ActuacionServicio;
 
 import org.jmock.Expectations;
 import org.jmock.Sequence;
@@ -41,12 +44,12 @@ public class SimpleObjectsTest {
     @Mock
     RepositoryService mockRepositoryService;
     
-    SimpleObjects simpleObjects;
+    ActuacionServicio actuacionServicio;
 
     @Before
     public void setUp() throws Exception {
-        simpleObjects = new SimpleObjects();
-        simpleObjects.repositoryService = mockRepositoryService;
+        actuacionServicio = new ActuacionServicio();
+        actuacionServicio.repositoryService = mockRepositoryService;
     }
 
     public static class Create extends SimpleObjectsTest {
@@ -55,12 +58,12 @@ public class SimpleObjectsTest {
         public void happyCase() throws Exception {
 
             // given
-            final SimpleObject simpleObject = new SimpleObject();
+            final Actuacion simpleObject = new Actuacion();
 
             final Sequence seq = context.sequence("create");
             context.checking(new Expectations() {
                 {
-                    oneOf(mockRepositoryService).instantiate(SimpleObject.class);
+                    oneOf(mockRepositoryService).instantiate(Actuacion.class);
                     inSequence(seq);
                     will(returnValue(simpleObject));
 
@@ -70,11 +73,11 @@ public class SimpleObjectsTest {
             });
 
             // when
-            final SimpleObject obj = simpleObjects.create("Foobar");
+            final Actuacion obj = actuacionServicio.create("Foobar");
 
             // then
             assertThat(obj).isEqualTo(simpleObject);
-            assertThat(obj.getName()).isEqualTo("Foobar");
+            assertThat(obj.getNombre()).isEqualTo("Foobar");
         }
 
     }
@@ -85,17 +88,17 @@ public class SimpleObjectsTest {
         public void happyCase() throws Exception {
 
             // given
-            final List<SimpleObject> all = Lists.newArrayList();
+            final List<Actuacion> all = Lists.newArrayList();
 
             context.checking(new Expectations() {
                 {
-                    oneOf(mockRepositoryService).allInstances(SimpleObject.class);
+                    oneOf(mockRepositoryService).allInstances(Actuacion.class);
                     will(returnValue(all));
                 }
             });
 
             // when
-            final List<SimpleObject> list = simpleObjects.listAll();
+            final List<Actuacion> list = actuacionServicio.listAll();
 
             // then
             assertThat(list).isEqualTo(all);

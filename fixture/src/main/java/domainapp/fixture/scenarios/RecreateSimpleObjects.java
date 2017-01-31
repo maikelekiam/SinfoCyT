@@ -27,7 +27,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
-import domainapp.dom.simple.SimpleObject;
+import domainapp.dom.actuacion.Actuacion;
 import domainapp.fixture.dom.simple.SimpleObjectCreate;
 import domainapp.fixture.dom.simple.SimpleObjectsTearDown;
 
@@ -57,12 +57,12 @@ public class RecreateSimpleObjects extends FixtureScript {
     //endregion
 
     //region > simpleObjects (output)
-    private final List<SimpleObject> simpleObjects = Lists.newArrayList();
+    private final List<Actuacion> simpleObjects = Lists.newArrayList();
 
     /**
      * The simpleobjects created by this fixture (output).
      */
-    public List<SimpleObject> getSimpleObjects() {
+    public List<Actuacion> getSimpleObjects() {
         return simpleObjects;
     }
     //endregion
